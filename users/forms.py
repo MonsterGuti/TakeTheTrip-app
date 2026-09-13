@@ -104,7 +104,7 @@ class ProfileUpdateForm(forms.ModelForm):
         self.fields['avatar'].required = False
         self.fields['phone_number'].required = True
         self.fields['car_model'].required = True
-        self.fields['bio'].required = True
+        self.fields['bio'].required = False
 
         self.fields['facebook_url'].required = False
         self.fields['instagram_url'].required = False
