@@ -71,7 +71,6 @@ def register(request):
 
     return render(request, 'users/register.html', {'form': form})
 
-
 @login_required
 def profile(request):
     profile_obj, _ = Profile.objects.get_or_create(user=request.user)
@@ -82,14 +81,22 @@ def profile(request):
             request.POST, request.FILES, instance=profile_obj
         )
 
+        # ТУК СЛАГАМЕ ДЕБЪГ ПРИНТОВЕ
+        print("--- DEBUG FILES ---", request.FILES)
+        print("--- DEBUG POST ---", request.POST)
+
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
+            print("--- DEBUG SUCCESS: Avatar is now:", profile_obj.avatar)
             messages.success(request, 'Профилът ви беше обновен успешно!')
             return redirect('profile')
+        else:
+            print("--- DEBUG FORM ERRORS ---", p_form.errors)
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=profile_obj)
+
 
     driver_rides = Ride.objects.filter(driver=request.user).order_by('-departure_time')
     reviews = Review.objects.filter(driver=request.user).select_related('reviewer', 'reviewer__profile').order_by(
