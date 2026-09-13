@@ -17,7 +17,6 @@ from django.urls import reverse
 
 from .models import Ride, Booking, RideMessage
 from .forms import RideForm, RegisterForm, RideMessageForm
-from .tokens import account_activation_token
 from notifications.models import Notification
 
 User = get_user_model()
@@ -120,6 +119,7 @@ def activate(request, uidb64, token):
         return redirect('login')
 
 
+# БЕЗ @login_required – Публичен достъп за разглеждане на детайлите
 def ride_detail(request, pk):
     ride = get_object_or_404(Ride, pk=pk)
     user_booking = None
@@ -143,7 +143,7 @@ def ride_detail(request, pk):
             if status_upper in ['APPROVED', 'CONFIRMED']:
                 has_confirmed_booking = True
 
-    is_driver = request.user == ride.driver
+    is_driver = request.user.is_authenticated and request.user == ride.driver
     is_participant = is_driver or has_confirmed_booking
 
     if request.method == 'POST' and is_participant:
@@ -177,7 +177,7 @@ def book_ride(request, pk):
     ride = get_object_or_404(Ride, id=pk)
 
     if ride.driver == request.user:
-        messages.error(request, "Не можете да резервирате собственото си пътуване!")
+        messages.error(request, "Не можете да резервирате собственoто си пътуване!")
         return redirect(f"{reverse('ride_detail', kwargs={'pk': ride.id})}#participants-section")
 
     existing_booking = Booking.objects.filter(
@@ -643,7 +643,6 @@ def proxy_geocode(request):
 
             for item in results:
                 place_type = item.get('type', '')
-                osm_type = item.get('osm_type', '')
                 if place_type in ['city', 'town', 'village', 'administrative'] and item.get('class') == 'boundary':
                     continue
                 data = [item]

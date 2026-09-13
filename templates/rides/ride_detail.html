@@ -35,14 +35,18 @@
         <div class="col-12 col-md-10 col-lg-8">
             <div class="card shadow-sm border-0 p-3 p-sm-4 mb-4 rounded-4 bg-white">
 
-                <!-- Хедър: Маршрут и Цена -->
+                <!-- Хедър: Маршрут, Цена и Бутон за Споделяне -->
                 <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
                     <h3 class="fw-bold m-0 text-dark fs-4 fs-sm-3 d-flex align-items-center gap-2">
                         <span>{{ ride.origin }}</span>
                         <i class="fa-solid fa-arrow-right-long text-muted fs-5"></i>
                         <span>{{ ride.destination }}</span>
                     </h3>
-                    <div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" id="share-btn" class="btn btn-outline-primary rounded-pill px-3 py-2 fs-6 fw-semibold shadow-sm d-inline-flex align-items-center gap-2">
+                            <i class="fa-solid fa-share-nodes"></i>
+                            <span class="d-none d-sm-inline">Сподели</span>
+                        </button>
                         <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fs-6 fw-bold rounded-pill shadow-sm">
                             {{ ride.price_per_seat }} €
                         </span>
@@ -339,6 +343,29 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Споделяне на пътуването
+            const shareBtn = document.getElementById("share-btn");
+            if (shareBtn) {
+                shareBtn.addEventListener("click", async () => {
+                    const shareData = {
+                        title: "Пътуване {{ ride.origin }} ➔ {{ ride.destination }}",
+                        text: "Виж това споделено пътуване от {{ ride.origin }} до {{ ride.destination }} за {{ ride.price_per_seat }} € в TakeTheTrip!",
+                        url: window.location.href,
+                    };
+
+                    if (navigator.share) {
+                        try {
+                            await navigator.share(shareData);
+                        } catch (err) {
+                            console.log("Грешка при споделяне:", err);
+                        }
+                    } else {
+                        navigator.clipboard.writeText(window.location.href);
+                        alert("Линкът към пътуването беше копиран в клипборда!");
+                    }
+                });
+            }
+
             const mapElement = document.getElementById('route-map');
             if (mapElement) {
                 const origin = "{{ ride.origin }}";
