@@ -6,12 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token }}">
 
+    {% block extra_head %}{% endblock %}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
     <!-- SEO Meta Tags -->
     <title>{% block title %}TakeTheTrip — Споделено пътуване в България{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}TakeTheTrip е водещата платформа за споделени пътувания в България. Намери евтин транспорт или сподели разходите си за гориво лесно, удобно и сигурно.{% endblock %}">
     <meta name="keywords" content="споделено пътуване, споделени пътувания, пътуване, междуградски транспорт, автостоп, TakeTheTrip, такси, спести от гориво">
     <meta name="author" content="TakeTheTrip Team">
-    <meta name="robots" content="index, follow">
 
     <!-- Open Graph (OG) Meta Tags -->
     <meta property="og:type" content="website">

@@ -1,9 +1,10 @@
 {% extends 'rides/base.html' %}
 
+{% block extra_head %}
+    <meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
 {% block content %}
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
 <div class="row justify-content-center align-items-center min-vh-75 my-5">
     <div class="col-lg-5 col-md-7 col-sm-10">
         <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5 bg-white">
