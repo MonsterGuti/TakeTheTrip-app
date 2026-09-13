@@ -35,33 +35,34 @@ def register(request):
             login(request, user)
 
             if user.email:
-                subject = 'Добре дошли в TakeTheTrip!'
-                html_content = f"""
-                <html>
-                    <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-                        <div style="max-width: 600px; margin: 0 auto; padding: 25px; border: 1px solid #e0e0e0; border-radius: 8px;">
-                            <h2 style="color: #0d6efd; margin-top: 0;">TakeTheTrip</h2>
-                            <p>Здравейте, <strong>{user.username}</strong>!</p>
-                            <p>Благодарим ви, че се регистрирахте в TakeTheTrip. Сега можете да споделяте пътуванията си или да намерите удобен транспорт.</p>
-                            <p>Желаем ви приятни и безаварийни пътувания!</p>
-                        </div>
-                    </body>
-                </html>
-                """
-                plain_message = strip_tags(html_content)
-
-                try:
-                    send_mail(
-                        subject=subject,
-                        message=plain_message,
-                        from_email=settings.DEFAULT_FROM_EMAIL,
-                        recipient_list=[user.email],
-                        html_message=html_content,
-                        fail_silently=False,
-                    )
-                    print(f"--- USERS SMTP SUCCESS ---: {user.email}")
-                except Exception as e:
-                    print(f"--- USERS SMTP ERROR ---: {e}")
+                pass
+                # subject = 'Добре дошли в TakeTheTrip!'
+                # html_content = f"""
+                # <html>
+                #     <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+                #         <div style="max-width: 600px; margin: 0 auto; padding: 25px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                #             <h2 style="color: #0d6efd; margin-top: 0;">TakeTheTrip</h2>
+                #             <p>Здравейте, <strong>{user.username}</strong>!</p>
+                #             <p>Благодарим ви, че се регистрирахте в TakeTheTrip. Сега можете да споделяте пътуванията си или да намерите удобен транспорт.</p>
+                #             <p>Желаем ви приятни и безаварийни пътувания!</p>
+                #         </div>
+                #     </body>
+                # </html>
+                # """
+                # plain_message = strip_tags(html_content)
+                #
+                # try:
+                #     send_mail(
+                #         subject=subject,
+                #         message=plain_message,
+                #         from_email=settings.DEFAULT_FROM_EMAIL,
+                #         recipient_list=[user.email],
+                #         html_message=html_content,
+                #         fail_silently=False,
+                #     )
+                #     print(f"--- USERS SMTP SUCCESS ---: {user.email}")
+                # except Exception as e:
+                #     print(f"--- USERS SMTP ERROR ---: {e}")
 
             messages.success(request, f'Успешна регистрация! Добре дошли, {user.username}!')
             return redirect('home')
