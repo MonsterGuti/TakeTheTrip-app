@@ -82,9 +82,6 @@ def profile(request):
             request.POST, request.FILES, instance=profile_obj
         )
 
-        if profile_obj.avatar:
-            p_form.fields['avatar'].required = False
-
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
@@ -93,8 +90,6 @@ def profile(request):
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=profile_obj)
-        if profile_obj.avatar:
-            p_form.fields['avatar'].required = False
 
     driver_rides = Ride.objects.filter(driver=request.user).order_by('-departure_time')
     reviews = Review.objects.filter(driver=request.user).select_related('reviewer', 'reviewer__profile').order_by(

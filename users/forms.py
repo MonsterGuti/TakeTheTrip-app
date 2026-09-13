@@ -101,7 +101,7 @@ class ProfileUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['avatar'].required = True
+        self.fields['avatar'].required = False
         self.fields['phone_number'].required = True
         self.fields['car_model'].required = True
         self.fields['bio'].required = True
