@@ -8,12 +8,13 @@
 
     {% block extra_head %}{% endblock %}
 
-    <!-- Favicon & Mobile Icons -->
-    <link rel="icon" type="image/x-icon" href="https://takethetripapp.com{% static 'images/favicon.ico' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://takethetripapp.com{% static 'images/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://takethetripapp.com{% static 'images/favicon-16x16.png' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://takethetripapp.com{% static 'images/apple-touch-icon.png' %}">
-    <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
+    <!-- Favicon & Mobile Icons (Google Compatible) -->
+    <link rel="shortcut icon" href="https://takethetripapp.com/static/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://takethetripapp.com/static/images/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://takethetripapp.com/static/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://takethetripapp.com/static/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://takethetripapp.com/static/images/apple-touch-icon.png">
+    <link rel="manifest" href="https://takethetripapp.com/static/images/site.webmanifest">
 
     <!-- SEO Meta Tags -->
     <title>{% block title %}TakeTheTrip — Споделено пътуване в България{% endblock %}</title>
