@@ -8,14 +8,12 @@
 
     {% block extra_head %}{% endblock %}
 
-    {% load static %}
-
-<!-- Favicon & Mobile Icons -->
-<link rel="icon" type="image/x-icon" href="{{ request.scheme }}://{{ request.get_host }}{% static 'images/favicon.ico' %}">
-<link rel="icon" type="image/png" sizes="32x32" href="{{ request.scheme }}://{{ request.get_host }}{% static 'images/favicon-32x32.png' %}">
-<link rel="icon" type="image/png" sizes="16x16" href="{{ request.scheme }}://{{ request.get_host }}{% static 'images/favicon-16x16.png' %}">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ request.scheme }}://{{ request.get_host }}{% static 'images/apple-touch-icon.png' %}">
-<link rel="manifest" href="{% static 'images/site.webmanifest' %}">
+    <!-- Favicon & Mobile Icons -->
+    <link rel="icon" type="image/x-icon" href="{{ request.scheme }}://{{ request.get_host }}{% static 'images/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ request.scheme }}://{{ request.get_host }}{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ request.scheme }}://{{ request.get_host }}{% static 'images/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ request.scheme }}://{{ request.get_host }}{% static 'images/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
 
     <!-- SEO Meta Tags -->
     <title>{% block title %}TakeTheTrip — Споделено пътуване в България{% endblock %}</title>
@@ -24,22 +22,22 @@
     <meta name="author" content="TakeTheTrip Team">
 
     <!-- Open Graph (OG) Meta Tags -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="{% block og_title %}TakeTheTrip — Модерната платформа за споделени пътувания{% endblock %}">
-<meta property="og:description" content="{% block og_description %}Намери или предложи споделено пътуване за броени секунди. Пътувай удобно и спести разходи!{% endblock %}">
-<meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.png' %}{% endblock %}">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="{{ request.build_absolute_uri }}">
-<meta property="og:site_name" content="TakeTheTrip">
-<meta property="og:locale" content="bg_BG">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}TakeTheTrip — Модерната платформа за споделени пътувания{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Намери или предложи споделено пътуване за броени секунди. Пътувай удобно и спести разходи!{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.png' %}?v=2{% endblock %}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:site_name" content="TakeTheTrip">
+    <meta property="og:locale" content="bg_BG">
 
-<!-- Twitter Card Meta Tags -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{% block twitter_title %}TakeTheTrip — Споделено пътуване{% endblock %}">
-<meta name="twitter:description" content="{% block twitter_description %}Сподели пътуване и пътувай по-изгодно из цяла България.{% endblock %}">
-<meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.png' %}{% endblock %}">
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}TakeTheTrip — Споделено пътуване{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Сподели пътуване и пътувай по-изгодно из цяла България.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.png' %}?v=2{% endblock %}">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -200,7 +198,7 @@
     </div>
 </footer>
 
-<!-- JS Skripts -->
+<!-- JS Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
