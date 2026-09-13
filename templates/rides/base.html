@@ -24,21 +24,22 @@
     <meta name="author" content="TakeTheTrip Team">
 
     <!-- Open Graph (OG) Meta Tags -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="{% block og_title %}TakeTheTrip — Модерната платформа за споделени пътувания{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Намери или предложи споделено пътуване за броени секунди. Пътувай удобно и спести разходи!{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.jpg' %}{% endblock %}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:site_name" content="TakeTheTrip">
-    <meta property="og:locale" content="bg_BG">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{% block og_title %}TakeTheTrip — Модерната платформа за споделени пътувания{% endblock %}">
+<meta property="og:description" content="{% block og_description %}Намери или предложи споделено пътуване за броени секунди. Пътувай удобно и спести разходи!{% endblock %}">
+<meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.png' %}{% endblock %}">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:site_name" content="TakeTheTrip">
+<meta property="og:locale" content="bg_BG">
 
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% block twitter_title %}TakeTheTrip — Споделено пътуване{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}Сподели пътуване и пътувай по-изгодно из цяла България.{% endblock %}">
-    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.jpg' %}{% endblock %}">
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{% block twitter_title %}TakeTheTrip — Споделено пътуване{% endblock %}">
+<meta name="twitter:description" content="{% block twitter_description %}Сподели пътуване и пътувай по-изгодно из цяла България.{% endblock %}">
+<meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.png' %}{% endblock %}">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
