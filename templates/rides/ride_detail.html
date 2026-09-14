@@ -18,14 +18,52 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <style>
         .chat-box {
-            background-color: #f8f9fa;
-            border-radius: 12px;
+            background-color: #f4f6f8 !important;
+            display: flex;
+            flex-direction: column;
         }
 
-        .chat-message-bubble {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        /* Изходящо съобщение (Мое) */
+        .chat-msg-outgoing {
+            align-self: flex-end;
+            max-width: 85%;
+            margin-left: auto;
+        }
+
+        .chat-msg-outgoing .bubble {
+            background-color: #0d6efd;
+            color: #ffffff;
+            border-radius: 18px 18px 2px 18px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-msg-outgoing .time-stamp {
+            color: rgba(255, 255, 255, 0.75) !important;
+        }
+
+        /* Входящо съобщение (Чуждо) */
+        .chat-msg-incoming {
+            align-self: flex-start;
+            max-width: 85%;
+        }
+
+        .chat-msg-incoming .bubble {
+            background-color: #ffffff;
+            color: #212529;
+            border: 1px solid #e9ecef;
+            border-radius: 18px 18px 18px 2px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Заобляне на полето и бутона */
+        .rounded-pill-start {
+            border-top-left-radius: 50px !important;
+            border-bottom-left-radius: 50px !important;
+        }
+
+        .rounded-pill-end {
+            border-top-right-radius: 50px !important;
+            border-bottom-right-radius: 50px !important;
         }
     </style>
 {% endblock %}
@@ -53,8 +91,8 @@
                         </button>
                         <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fs-6 fw-bold rounded-pill shadow-sm d-inline-flex align-items-center justify-content-center"
                               style="line-height: 1.25; height: 38px;">
-            {{ ride.price_per_seat }} €
-        </span>
+                            {{ ride.price_per_seat }} €
+                        </span>
                     </div>
                 </div>
 
@@ -324,24 +362,39 @@
 
             <!-- Чат секция -->
             {% if is_participant %}
-                <div id="chat-section" class="card shadow-sm border-0 p-3 p-sm-4 rounded-4 mb-4 bg-white">
-                    <h5 class="fw-bold mb-3 text-dark fs-5 d-flex align-items-center gap-2">
-                        <i class="fa-solid fa-comments text-primary"></i> Общ чат на пътуването
-                    </h5>
+                <div id="chat-section" class="card shadow-sm border-0 rounded-4 mb-4 bg-white overflow-hidden">
+                    <div class="card-header bg-white border-bottom py-3 px-3 px-sm-4 d-flex align-items-center justify-content-between">
+                        <h5 class="fw-bold mb-0 text-dark fs-6 fs-sm-5 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-comments text-primary"></i> Общ чат на пътуването
+                        </h5>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2.5 py-1 small">
+                            {{ ride.driver.get_full_name|default:ride.driver.username }} (Шофьор)
+                        </span>
+                    </div>
 
-                    <div id="chat-box" class="chat-box p-3 mb-3 border overflow-auto" style="max-height: 380px;"></div>
+                    <!-- Контейнер за съобщенията -->
+                    <div id="chat-box" class="chat-box p-3 bg-light overflow-auto"
+                         style="height: 400px; max-height: 60vh;">
+                        <!-- Съобщенията се зареждат динамично тук -->
+                    </div>
 
-                    <form id="chat-form" method="POST" action="{% url 'send_message_ajax' ride.pk %}">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            {{ message_form.content }}
-                            <button class="btn btn-primary px-3 px-sm-4 fw-semibold d-inline-flex align-items-center gap-2"
-                                    type="submit">
-                                <span>Изпрати</span>
-                                <i class="fa-solid fa-paper-plane extra-small"></i>
-                            </button>
-                        </div>
-                    </form>
+                    <!-- Форма за изпращане -->
+                    <div class="card-footer bg-white border-top p-2 p-sm-3">
+                        <form id="chat-form" method="POST" action="{% url 'send_message_ajax' ride.pk %}">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text" name="content"
+                                       class="form-control rounded-pill-start border-end-0 shadow-none ps-3"
+                                       placeholder="Напишете съобщение..." autocomplete="off" required
+                                       style="font-size: 0.95rem;">
+                                <button class="btn btn-primary rounded-pill-end px-3 px-sm-4 fw-semibold d-inline-flex align-items-center gap-1"
+                                        type="submit">
+                                    <span class="d-none d-sm-inline">Изпрати</span>
+                                    <i class="fa-solid fa-paper-plane fs-6"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             {% endif %}
 
@@ -443,6 +496,7 @@
 
             {% if is_participant %}
                 const rideId = "{{ ride.pk }}";
+                const currentUsername = "{{ request.user.username }}";
                 const chatForm = document.getElementById("chat-form");
                 const chatBox = document.getElementById("chat-box");
                 const chatSection = document.getElementById("chat-section");
@@ -462,34 +516,48 @@
                     if (msg.content.startsWith("🤖 [Система]:")) {
                         const systemText = msg.content.replace("🤖 [Система]:", "").trim();
                         return `
-                            <div class="text-center my-2">
-                                <span class="badge bg-light text-muted border fw-normal px-3 py-2 rounded-pill shadow-sm" style="font-size: 0.8rem;">
+                            <div class="text-center my-2 w-100">
+                                <span class="badge bg-white text-muted border fw-normal px-3 py-1.5 rounded-pill shadow-sm small">
                                     🤖 ${systemText} <span class="text-black-50 ms-1">(${msg.created_at})</span>
                                 </span>
                             </div>
                         `;
                     }
 
-                    const profileUrl = `/profile/${msg.sender_username}/`;
+                    const isMe = msg.sender_username === currentUsername;
+                    const profileUrl = `/users/profile/${msg.sender_username}/`;
 
                     const avatarHtml = msg.avatar_url
-                        ? `<a href="${profileUrl}"><img src="${msg.avatar_url}" class="rounded-circle me-2 object-fit-cover shadow-sm flex-shrink-0 border" style="width: 34px; height: 34px;" alt="Avatar"></a>`
-                        : `<a href="${profileUrl}" class="text-decoration-none"><div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2 shadow-sm flex-shrink-0 text-uppercase fw-bold" style="width: 34px; height: 34px; font-size: 13px;">${msg.sender_initial}</div></a>`;
+                        ? `<a href="${profileUrl}"><img src="${msg.avatar_url}" class="rounded-circle shadow-sm flex-shrink-0 border" style="width: 32px; height: 32px; object-fit: cover;" alt="Avatar"></a>`
+                        : `<a href="${profileUrl}" class="text-decoration-none"><div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center shadow-sm flex-shrink-0 text-uppercase fw-bold" style="width: 32px; height: 32px; font-size: 12px;">${msg.sender_initial}</div></a>`;
 
-                    return `
-                        <div class="d-flex align-items-start mb-3">
-                            ${avatarHtml}
-                            <div class="p-2.5 p-sm-3 rounded-3 chat-message-bubble border text-break" style="max-width: 82%;">
-                                <div class="small fw-bold border-bottom pb-1 mb-1.5 text-muted d-flex justify-content-between align-items-center gap-3">
-                                    <a href="${profileUrl}" class="text-decoration-none text-dark fw-bold">
-                                        ${msg.sender_name}
-                                    </a>
-                                    <span class="fw-normal text-muted extra-small">${msg.created_at}</span>
+                    if (isMe) {
+                        return `
+                            <div class="chat-msg-outgoing mb-2.5">
+                                <div class="bubble p-2.5 px-3 text-break">
+                                    <div class="fs-6 lh-sm">${msg.content}</div>
+                                    <div class="text-end mt-1" style="font-size: 0.7rem;">
+                                        <span class="time-stamp">${msg.created_at}</span>
+                                    </div>
                                 </div>
-                                <div class="text-dark fs-6">${msg.content}</div>
                             </div>
-                        </div>
-                    `;
+                        `;
+                    } else {
+                        return `
+                            <div class="chat-msg-incoming mb-2.5 d-flex gap-2 align-items-start">
+                                ${avatarHtml}
+                                <div class="bubble p-2.5 px-3 text-break">
+                                    <div class="d-flex align-items-center justify-content-between gap-3 mb-1">
+                                        <a href="${profileUrl}" class="text-decoration-none fw-bold text-primary small">
+                                            ${msg.sender_name}
+                                        </a>
+                                        <span class="text-muted extra-small" style="font-size: 0.7rem;">${msg.created_at}</span>
+                                    </div>
+                                    <div class="text-dark fs-6 lh-sm">${msg.content}</div>
+                                </div>
+                            </div>
+                        `;
+                    }
                 }
 
                 function fetchMessages() {
@@ -499,7 +567,7 @@
                             if (data.success) {
                                 if (data.messages.length !== lastMessageCount) {
                                     if (data.messages.length === 0) {
-                                        chatBox.innerHTML = '<p class="text-muted text-center my-3 small">Няма съобщения. Започнете разговора!</p>';
+                                        chatBox.innerHTML = '<p class="text-muted text-center my-auto small">Няма съобщения. Започнете разговора!</p>';
                                     } else {
                                         chatBox.innerHTML = data.messages.map(renderMessage).join('');
                                     }
@@ -510,6 +578,9 @@
                         })
                         .catch(error => console.error("Грешка при извличане на съобщенията:", error));
                 }
+
+                fetchMessages();
+                setInterval(fetchMessages, 3000);
 
                 if (chatForm) {
                     chatForm.addEventListener("submit", function (e) {
@@ -527,27 +598,17 @@
                                 "X-Requested-With": "XMLHttpRequest"
                             }
                         })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    inputField.value = "";
-                                    fetchMessages();
-                                }
-                            })
-                            .catch(error => console.error("Грешка при изпращането:", error));
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                inputField.value = "";
+                                fetchMessages();
+                            }
+                        })
+                        .catch(error => console.error("Грешка при изпращане:", error));
                     });
                 }
-
-                fetchMessages();
-                setInterval(fetchMessages, 3000);
             {% endif %}
-
-            if (window.location.hash === "#participants-section") {
-                const partSec = document.getElementById("participants-section");
-                if (partSec) {
-                    partSec.scrollIntoView({behavior: 'smooth'});
-                }
-            }
         });
     </script>
 {% endblock %}
