@@ -22,12 +22,13 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            width: 100%;
         }
 
         /* Изходящо съобщение (Мое) */
         .chat-msg-outgoing {
             align-self: flex-end;
-            max-width: 88%;
+            max-width: 85%;
             margin-left: auto;
         }
 
@@ -47,7 +48,7 @@
         /* Входящо съобщение (Чуждо) */
         .chat-msg-incoming {
             align-self: flex-start;
-            max-width: 88%;
+            max-width: 85%;
         }
 
         .chat-msg-incoming .bubble {
@@ -60,13 +61,19 @@
             word-break: break-word;
         }
 
-        /* Заобляне на полето и бутона за мобилни */
-        .rounded-pill-start {
+        /* Премахване на auto-zoom на iPhone (мин. 16px) + Заобляне */
+        .chat-input-field {
+            font-size: 16px !important; /* Ключово за спиране на auto-zoom в Safari! */
             border-top-left-radius: 50px !important;
             border-bottom-left-radius: 50px !important;
         }
 
-        .rounded-pill-end {
+        .chat-input-field:focus {
+            box-shadow: none !important;
+            border-color: #0d6efd !important;
+        }
+
+        .chat-send-btn {
             border-top-right-radius: 50px !important;
             border-bottom-right-radius: 50px !important;
         }
@@ -397,10 +404,9 @@
                             {% csrf_token %}
                             <div class="input-group">
                                 <input type="text" name="content"
-                                       class="form-control rounded-pill-start border-end-0 shadow-none ps-3"
-                                       placeholder="Напишете съобщение..." autocomplete="off" required
-                                       style="font-size: 0.9rem;">
-                                <button class="btn btn-primary rounded-pill-end px-3 px-sm-4 fw-semibold d-inline-flex align-items-center gap-1"
+                                       class="form-control chat-input-field border-end-0 shadow-none ps-3"
+                                       placeholder="Напишете съобщение..." autocomplete="off" required>
+                                <button class="btn btn-primary chat-send-btn px-3 px-sm-4 fw-semibold d-inline-flex align-items-center gap-1"
                                         type="submit">
                                     <span class="d-none d-sm-inline">Изпрати</span>
                                     <i class="fa-solid fa-paper-plane fs-6"></i>
@@ -445,6 +451,7 @@
                     }
                 });
             }
+
             const mapElement = document.getElementById('route-map');
             if (mapElement) {
                 const origin = "{{ ride.origin }}";
@@ -526,33 +533,31 @@
                 }
 
                 function renderMessage(msg) {
-                    const content = msg.content || msg.text || '';
-
-                    if (content.startsWith("🤖 [Система]:")) {
-                        const systemText = content.replace("🤖 [Система]:", "").trim();
+                    if (msg.content.startsWith("🤖 [Система]:")) {
+                        const systemText = msg.content.replace("🤖 [Система]:", "").trim();
                         return `
                             <div class="text-center my-2 w-100">
                                 <span class="badge bg-white text-muted border fw-normal px-2 py-1 rounded-pill shadow-sm small system-msg-badge">
-                                    🤖 ${systemText} <span class="text-black-50 ms-1">(${msg.created_at || ''})</span>
+                                    🤖 ${systemText} <span class="text-black-50 ms-1">(${msg.created_at})</span>
                                 </span>
                             </div>
                         `;
                     }
 
                     const isMe = msg.sender_username === currentUsername;
-                    const profileUrl = `/users/profile/${encodeURIComponent(msg.sender_username)}/`;
+                    const profileUrl = `/users/profile/${msg.sender_username}/`;
 
                     const avatarHtml = msg.avatar_url
                         ? `<a href="${profileUrl}"><img src="${msg.avatar_url}" class="rounded-circle shadow-sm flex-shrink-0 border" style="width: 32px; height: 32px; object-fit: cover;" alt="Avatar"></a>`
-                        : `<a href="${profileUrl}" class="text-decoration-none"><div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center shadow-sm flex-shrink-0 text-uppercase fw-bold" style="width: 32px; height: 32px; font-size: 12px;">${msg.sender_initial || msg.sender_username.charAt(0)}</div></a>`;
+                        : `<a href="${profileUrl}" class="text-decoration-none"><div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center shadow-sm flex-shrink-0 text-uppercase fw-bold" style="width: 32px; height: 32px; font-size: 12px;">${msg.sender_initial}</div></a>`;
 
                     if (isMe) {
                         return `
                             <div class="chat-msg-outgoing mb-2.5">
                                 <div class="bubble p-2 px-3">
-                                    <div class="fs-6 lh-sm">${content}</div>
+                                    <div class="fs-6 lh-sm">${msg.content}</div>
                                     <div class="text-end mt-1" style="font-size: 0.68rem;">
-                                        <span class="time-stamp">${msg.created_at || ''}</span>
+                                        <span class="time-stamp">${msg.created_at}</span>
                                     </div>
                                 </div>
                             </div>
@@ -564,11 +569,11 @@
                                 <div class="bubble p-2 px-3">
                                     <div class="d-flex align-items-center justify-content-between gap-2 mb-1">
                                         <a href="${profileUrl}" class="text-decoration-none fw-bold text-primary small text-truncate">
-                                            ${msg.sender_name || msg.sender_username}
+                                            ${msg.sender_name}
                                         </a>
-                                        <span class="text-muted extra-small" style="font-size: 0.68rem;">${msg.created_at || ''}</span>
+                                        <span class="text-muted extra-small" style="font-size: 0.68rem;">${msg.created_at}</span>
                                     </div>
-                                    <div class="text-dark fs-6 lh-sm">${content}</div>
+                                    <div class="text-dark fs-6 lh-sm">${msg.content}</div>
                                 </div>
                             </div>
                         `;
@@ -577,20 +582,18 @@
 
                 function fetchMessages() {
                     fetch(`/ride/${rideId}/messages/fetch/`)
-                        .then(response => {
-                            if (!response.ok) throw new Error("HTTP error " + response.status);
-                            return response.json();
-                        })
+                        .then(response => response.json())
                         .then(data => {
-                            const messages = data.messages || [];
-                            if (messages.length !== lastMessageCount) {
-                                if (messages.length === 0) {
-                                    chatBox.innerHTML = '<p class="text-muted text-center my-auto small">Няма съобщения. Започнете разговора!</p>';
-                                } else {
-                                    chatBox.innerHTML = messages.map(renderMessage).join('');
+                            if (data.success) {
+                                if (data.messages.length !== lastMessageCount) {
+                                    if (data.messages.length === 0) {
+                                        chatBox.innerHTML = '<p class="text-muted text-center my-auto small">Няма съобщения. Започнете разговора!</p>';
+                                    } else {
+                                        chatBox.innerHTML = data.messages.map(renderMessage).join('');
+                                    }
+                                    chatBox.scrollTop = chatBox.scrollHeight;
+                                    lastMessageCount = data.messages.length;
                                 }
-                                chatBox.scrollTop = chatBox.scrollHeight;
-                                lastMessageCount = messages.length;
                             }
                         })
                         .catch(error => console.error("Грешка при извличане на съобщенията:", error));
@@ -617,7 +620,7 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            if (data.success || data.status === 'ok') {
+                            if (data.success) {
                                 inputField.value = "";
                                 fetchMessages();
                             }

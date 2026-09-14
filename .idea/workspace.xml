@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d4e4e73e-16ae-4879-a15e-bbf2283cdf68" name="Changes" comment="creating admin models" />
+    <list default="true" id="d4e4e73e-16ae-4879-a15e-bbf2283cdf68" name="Changes" comment="creating admin models">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -131,7 +133,7 @@
       <workItem from="1788190563343" duration="49584000" />
       <workItem from="1789053121342" duration="16447000" />
       <workItem from="1789234468185" duration="6614000" />
-      <workItem from="1789386328741" duration="345000" />
+      <workItem from="1789386328741" duration="1056000" />
     </task>
     <task id="LOCAL-00001" summary="SEO optimization">
       <option name="closed" value="true" />
