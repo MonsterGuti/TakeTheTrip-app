@@ -2,17 +2,13 @@
 {% load static %}
 
 <!-- SEO и Мета Тагове за конкретното пътуване -->
-{% block title %}Пътуване от {{ ride.origin }} до {{ ride.destination }} за {{ ride.price_per_seat }} € —
-    TakeTheTrip{% endblock %}
+{% block title %}Пътуване от {{ ride.origin }} до {{ ride.destination }} за {{ ride.price_per_seat }} € — TakeTheTrip{% endblock %}
 
-{% block meta_description %}Споделено пътуване от {{ ride.origin }} до {{ ride.destination }} на
-    {{ ride.departure_time|date:"d M Y, H:i" }} ч. Цена: {{ ride.price_per_seat }} €. Остават {{ ride.available_seats }}
-    свободни места. Шофьор: {{ ride.driver.get_full_name|default:ride.driver.username }}.{% endblock %}
+{% block meta_description %}Споделено пътуване от {{ ride.origin }} до {{ ride.destination }} на {{ ride.departure_time|date:"d M Y, H:i" }} ч. Цена: {{ ride.price_per_seat }} €. Остават {{ ride.available_seats }} свободни места. Шофьор: {{ ride.driver.get_full_name|default:ride.driver.username }}.{% endblock %}
 
 {% block og_title %}Пътуване {{ ride.origin }} ➔ {{ ride.destination }} ({{ ride.price_per_seat }} €){% endblock %}
 
-{% block og_description %}Търсиш евтин и удобен транспорт? Заяви място за пътуването от {{ ride.origin }} до
-    {{ ride.destination }} с {{ ride.driver.get_full_name|default:ride.driver.username }}.{% endblock %}
+{% block og_description %}Търсиш евтин и удобен транспорт? Заяви място за пътуването от {{ ride.origin }} до {{ ride.destination }} с {{ ride.driver.get_full_name|default:ride.driver.username }}.{% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -76,34 +72,25 @@
                     <h5 class="fw-bold text-dark mb-3 fs-6 fs-sm-5 d-flex align-items-center gap-2">
                         <i class="fa-solid fa-map-location-dot text-primary"></i> Карта на маршрута
                     </h5>
-                    <div id="route-map" style="height: 350px; width: 100%; border-radius: 16px;"
-                         class="shadow-sm border"></div>
+                    <div id="route-map" style="height: 350px; width: 100%; border-radius: 16px;" class="shadow-sm border"></div>
                 </div>
 
                 <!-- Шофьор -->
                 <div class="d-flex align-items-center mt-3 mt-sm-4 pt-3 border-top">
                     {% if ride.driver.profile.image %}
-                        <img src="{{ ride.driver.profile.image.url }}"
-                             class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border"
-                             style="width: 48px; height: 48px;" alt="Avatar">
+                        <img src="{{ ride.driver.profile.image.url }}" class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border" style="width: 48px; height: 48px;" alt="Avatar">
                     {% elif ride.driver.profile.avatar %}
-                        <img src="{{ ride.driver.profile.avatar.url }}"
-                             class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border"
-                             style="width: 48px; height: 48px;" alt="Avatar">
+                        <img src="{{ ride.driver.profile.avatar.url }}" class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border" style="width: 48px; height: 48px;" alt="Avatar">
                     {% elif ride.driver.profile.profile_picture %}
-                        <img src="{{ ride.driver.profile.profile_picture.url }}"
-                             class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border"
-                             style="width: 48px; height: 48px;" alt="Avatar">
+                        <img src="{{ ride.driver.profile.profile_picture.url }}" class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border" style="width: 48px; height: 48px;" alt="Avatar">
                     {% else %}
-                        <div class="me-3 rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold fs-5 text-uppercase shadow-sm flex-shrink-0"
-                             style="width: 48px; height: 48px;">
+                        <div class="me-3 rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold fs-5 text-uppercase shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
                             {{ ride.driver.username.0 }}
                         </div>
                     {% endif %}
                     <div class="text-truncate">
                         <span class="text-muted small d-block">Шофьор</span>
-                        <a href="{% url 'public_profile' ride.driver.username %}"
-                           class="text-decoration-none text-dark">
+                        <a href="{% url 'public_profile' ride.driver.username %}" class="text-decoration-none text-dark">
                             <strong class="fs-6 text-truncate d-block fw-semibold">
                                 {{ ride.driver.get_full_name|default:ride.driver.username }}
                             </strong>
@@ -123,26 +110,18 @@
                                     <li class="list-group-item d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between px-0 border-0 mb-2 gap-2 bg-transparent">
                                         <div class="d-flex align-items-center w-100 w-sm-auto text-truncate">
                                             {% if b.passenger.profile.image %}
-                                                <img src="{{ b.passenger.profile.image.url }}"
-                                                     class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border"
-                                                     style="width: 38px; height: 38px;" alt="Avatar">
+                                                <img src="{{ b.passenger.profile.image.url }}" class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border" style="width: 38px; height: 38px;" alt="Avatar">
                                             {% elif b.passenger.profile.avatar %}
-                                                <img src="{{ b.passenger.profile.avatar.url }}"
-                                                     class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border"
-                                                     style="width: 38px; height: 38px;" alt="Avatar">
+                                                <img src="{{ b.passenger.profile.avatar.url }}" class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border" style="width: 38px; height: 38px;" alt="Avatar">
                                             {% elif b.passenger.profile.profile_picture %}
-                                                <img src="{{ b.passenger.profile.profile_picture.url }}"
-                                                     class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border"
-                                                     style="width: 38px; height: 38px;" alt="Avatar">
+                                                <img src="{{ b.passenger.profile.profile_picture.url }}" class="rounded-circle me-3 object-fit-cover shadow-sm flex-shrink-0 border" style="width: 38px; height: 38px;" alt="Avatar">
                                             {% else %}
-                                                <div class="me-3 rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center text-uppercase shadow-sm flex-shrink-0 fw-bold"
-                                                     style="width: 38px; height: 38px; font-size: 14px;">
+                                                <div class="me-3 rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center text-uppercase shadow-sm flex-shrink-0 fw-bold" style="width: 38px; height: 38px; font-size: 14px;">
                                                     {{ b.passenger.username.0 }}
                                                 </div>
                                             {% endif %}
                                             <div class="text-truncate">
-                                                <a href="{% url 'public_profile' b.passenger.username %}"
-                                                   class="text-decoration-none text-dark">
+                                                <a href="{% url 'public_profile' b.passenger.username %}" class="text-decoration-none text-dark">
                                                     <strong class="d-block text-truncate fw-semibold">
                                                         {{ b.passenger.get_full_name|default:b.passenger.username }}
                                                     </strong>
@@ -158,16 +137,12 @@
                                         {% if is_driver %}
                                             {% if b.status|upper == 'PENDING' %}
                                                 <div class="d-flex gap-2 w-100 w-sm-auto mt-2 mt-sm-0 justify-content-end">
-                                                    <a href="{% url 'approve_booking' b.id %}"
-                                                       class="btn btn-sm btn-success rounded-3 px-3 flex-fill flex-sm-grow-0 fw-semibold">Приеми</a>
-                                                    <a href="{% url 'reject_booking' b.id %}"
-                                                       class="btn btn-sm btn-outline-danger rounded-3 px-3 flex-fill flex-sm-grow-0 fw-semibold">Отхвърли</a>
+                                                    <a href="{% url 'approve_booking' b.id %}" class="btn btn-sm btn-success rounded-3 px-3 flex-fill flex-sm-grow-0 fw-semibold">Приеми</a>
+                                                    <a href="{% url 'reject_booking' b.id %}" class="btn btn-sm btn-outline-danger rounded-3 px-3 flex-fill flex-sm-grow-0 fw-semibold">Отхвърли</a>
                                                 </div>
                                             {% elif b.status|upper == 'APPROVED' or b.status|upper == 'CONFIRMED' %}
                                                 <div class="d-flex gap-2 w-100 w-sm-auto mt-2 mt-sm-0 justify-content-end">
-                                                    <a href="{% url 'remove_passenger' b.id %}"
-                                                       class="btn btn-sm btn-outline-danger rounded-3 px-3 flex-fill flex-sm-grow-0 fw-semibold"
-                                                       onclick="return confirm('Сигурни ли сте, че искате да премахнете {{ b.passenger.username }} от пътуването?');">
+                                                    <a href="{% url 'remove_passenger' b.id %}" class="btn btn-sm btn-outline-danger rounded-3 px-3 flex-fill flex-sm-grow-0 fw-semibold" onclick="return confirm('Сигурни ли сте, че искате да премахнете {{ b.passenger.username }} от пътуването?');">
                                                         Премахни
                                                     </a>
                                                 </div>
@@ -191,15 +166,12 @@
                             </div>
 
                             <div class="d-flex flex-column flex-sm-row gap-2">
-                                <a href="{% url 'edit_ride' ride.pk %}"
-                                   class="btn btn-warning w-100 py-2 rounded-3 fw-semibold d-inline-flex align-items-center justify-content-center gap-2 text-dark shadow-sm">
+                                <a href="{% url 'edit_ride' ride.pk %}" class="btn btn-warning w-100 py-2 rounded-3 fw-semibold d-inline-flex align-items-center justify-content-center gap-2 text-dark shadow-sm">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                     <span>Редактирай пътуването</span>
                                 </a>
 
-                                <button type="button"
-                                        class="btn btn-outline-danger w-100 py-2 rounded-3 fw-semibold d-inline-flex align-items-center justify-content-center gap-2"
-                                        data-bs-toggle="modal" data-bs-target="#deleteRideModal">
+                                <button type="button" class="btn btn-outline-danger w-100 py-2 rounded-3 fw-semibold d-inline-flex align-items-center justify-content-center gap-2" data-bs-toggle="modal" data-bs-target="#deleteRideModal">
                                     <i class="fa-regular fa-trash-can"></i>
                                     <span>Изтрий пътуването</span>
                                 </button>
@@ -211,27 +183,21 @@
                                 </div>
                                 <form method="POST" action="{% url 'cancel_booking' ride.pk %}" class="mb-2">
                                     {% csrf_token %}
-                                    <button type="submit"
-                                            class="btn btn-outline-danger w-100 py-2 rounded-3 fw-semibold"
-                                            onclick="return confirm('Сигурни ли сте, че искате да отмените заявката си?');">
+                                    <button type="submit" class="btn btn-outline-danger w-100 py-2 rounded-3 fw-semibold" onclick="return confirm('Сигурни ли сте, че искате да отмените заявката си?');">
                                         Отмени заявката
                                     </button>
                                 </form>
                             {% elif user_booking.status|upper == 'APPROVED' or user_booking.status|upper == 'CONFIRMED' %}
                                 <div class="alert alert-success text-center mb-3 py-2 rounded-3 small">
-                                    <i class="fa-solid fa-circle-check me-1"></i> Имате потвърдено място за това
-                                    пътуване!
+                                    <i class="fa-solid fa-circle-check me-1"></i> Имате потвърдено място за това пътуване!
                                 </div>
                                 <form method="POST" action="{% url 'cancel_booking' ride.pk %}" class="mb-2">
                                     {% csrf_token %}
-                                    <button type="submit"
-                                            class="btn btn-outline-danger w-100 py-2 rounded-3 mb-2 fw-semibold"
-                                            onclick="return confirm('Сигурни ли сте, че искате да се откажете от това пътуване?');">
+                                    <button type="submit" class="btn btn-outline-danger w-100 py-2 rounded-3 mb-2 fw-semibold" onclick="return confirm('Сигурни ли сте, че искате да се откажете от това пътуване?');">
                                         Откажи резервацията (Напусни пътуването)
                                     </button>
                                 </form>
-                                <a href="{% url 'add_review' ride.pk %}"
-                                   class="btn btn-warning w-100 py-2 fw-bold text-dark rounded-3 shadow-sm d-inline-flex align-items-center justify-content-center gap-2">
+                                <a href="{% url 'add_review' ride.pk %}" class="btn btn-warning w-100 py-2 fw-bold text-dark rounded-3 shadow-sm d-inline-flex align-items-center justify-content-center gap-2">
                                     <i class="fa-solid fa-star"></i>
                                     <span>Остави отзив за шофьора</span>
                                 </a>
@@ -256,8 +222,7 @@
                         {% elif ride.available_seats > 0 %}
                             <form method="POST" action="{% url 'book_ride' ride.pk %}">
                                 {% csrf_token %}
-                                <button type="submit"
-                                        class="btn btn-primary w-100 py-2 rounded-3 fw-semibold shadow-sm">
+                                <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-semibold shadow-sm">
                                     Заяви място
                                 </button>
                             </form>
@@ -267,42 +232,41 @@
                             </div>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'login' %}?next={% url 'ride_detail' ride.pk %}"
-                           class="btn btn-primary w-100 py-2 rounded-3 fw-semibold">
-                            Влезте в профила си, за да резервирате
-                        </a>
+                        <!-- Бутон за нелогинати потребители (Гости) -->
+                        {% if ride.available_seats > 0 %}
+                            <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary w-100 py-2 rounded-3 fw-semibold shadow-sm">
+                                Заяви място
+                            </a>
+                        {% else %}
+                            <div class="alert alert-warning text-center mb-0 py-2 rounded-3 small">
+                                Няма останали свободни места.
+                            </div>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
 
             <!-- Модал за изтриване на пътуване -->
             {% if is_driver %}
-                <div class="modal fade" id="deleteRideModal" tabindex="-1" aria-labelledby="deleteRideModalLabel"
-                     aria-hidden="true">
+                <div class="modal fade" id="deleteRideModal" tabindex="-1" aria-labelledby="deleteRideModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content border-0 shadow rounded-4">
                             <div class="modal-header border-0 pb-0">
-                                <h5 class="modal-title fw-bold text-danger" id="deleteRideModalLabel">Потвърждение за
-                                    изтриване</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                <h5 class="modal-title fw-bold text-danger" id="deleteRideModalLabel">Потвърждение за изтриване</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                Сигурни ли сте, че искате да изтриете пътуването от <strong>{{ ride.origin }}</strong>
-                                до <strong>{{ ride.destination }}</strong>?
-                                <br><small class="text-muted">Това действие ще премахне пътуването и за всички
-                                регистрирани пътници.</small>
+                                Сигурни ли сте, че искате да изтриете пътуването от <strong>{{ ride.origin }}</strong> до <strong>{{ ride.destination }}</strong>?
+                                <br><small class="text-muted">Това действие ще премахне пътуването и за всички регистрирани пътници.</small>
                             </div>
                             <div class="modal-footer border-0 pt-0">
-                                <button type="button" class="btn btn-light rounded-3 px-4 fw-semibold"
-                                        data-bs-dismiss="modal">
+                                <button type="button" class="btn btn-light rounded-3 px-4 fw-semibold" data-bs-dismiss="modal">
                                     Отказ
                                 </button>
 
                                 <form method="POST" action="{% url 'delete_ride' ride.pk %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger rounded-3 px-4 fw-semibold">Да, изтрий
-                                    </button>
+                                    <button type="submit" class="btn btn-danger rounded-3 px-4 fw-semibold">Да, изтрий</button>
                                 </form>
                             </div>
                         </div>
@@ -317,15 +281,13 @@
                         <i class="fa-solid fa-comments text-primary"></i> Общ чат на пътуването
                     </h5>
 
-                    <div id="chat-box" class="chat-box p-3 mb-3 border overflow-auto" style="max-height: 380px;">
-                    </div>
+                    <div id="chat-box" class="chat-box p-3 mb-3 border overflow-auto" style="max-height: 380px;"></div>
 
                     <form id="chat-form" method="POST" action="{% url 'send_message_ajax' ride.pk %}">
                         {% csrf_token %}
                         <div class="input-group">
                             {{ message_form.content }}
-                            <button class="btn btn-primary px-3 px-sm-4 fw-semibold d-inline-flex align-items-center gap-2"
-                                    type="submit">
+                            <button class="btn btn-primary px-3 px-sm-4 fw-semibold d-inline-flex align-items-center gap-2" type="submit">
                                 <span>Изпрати</span>
                                 <i class="fa-solid fa-paper-plane extra-small"></i>
                             </button>
@@ -528,15 +490,11 @@
                 fetchMessages();
                 setInterval(fetchMessages, 3000);
             {% endif %}
-        });
 
-        document.addEventListener("DOMContentLoaded", function () {
             if (window.location.hash === "#participants-section") {
-                const section = document.getElementById("participants-section");
-                if (section) {
-                    setTimeout(() => {
-                        section.scrollIntoView({behavior: 'smooth', block: 'center'});
-                    }, 300);
+                const partSec = document.getElementById("participants-section");
+                if (partSec) {
+                    partSec.scrollIntoView({behavior: 'smooth'});
                 }
             }
         });

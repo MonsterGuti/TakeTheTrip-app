@@ -119,7 +119,6 @@ def activate(request, uidb64, token):
         return redirect('login')
 
 
-# БЕЗ @login_required – Публичен достъп за разглеждане на детайлите
 def ride_detail(request, pk):
     ride = get_object_or_404(Ride, pk=pk)
     user_booking = None
