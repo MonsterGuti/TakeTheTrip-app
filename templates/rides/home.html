@@ -125,7 +125,8 @@
         <div class="row g-3">
             {% for ride in rides %}
                 <div class="col-md-6">
-                    <a href="{% if user.is_authenticated %}{% url 'ride_detail' ride.pk %}{% else %}{% url 'login' %}?next={% url 'ride_detail' ride.pk %}{% endif %}" class="text-decoration-none text-dark d-block">
+                    <!-- ✅ ИЗПРАВЕН ЛИНК: Винаги сочи директно към детайлите за пътуването -->
+                    <a href="{% url 'ride_detail' ride.pk %}" class="text-decoration-none text-dark d-block">
                         <article class="card ride-card p-3 border-0 shadow-sm rounded-4 bg-white h-100">
 
                             <div class="d-flex justify-content-between align-items-start mb-2">
