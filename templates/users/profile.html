@@ -2,8 +2,12 @@
 {% load static %}
 
 {% block content %}
+<!-- Cropper.js CSS & JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
 <style>
-    /* Стилове за бранд бутоните с !important за сигурно прилагане */
+    /* Стилове за бранд бутоните */
     .social-btn {
         display: inline-flex !important;
         align-items: center !important;
@@ -43,7 +47,6 @@
         box-shadow: 0 6px 15px rgba(220, 39, 67, 0.35) !important;
     }
 
-    /* Иконки в Input полетата */
     .input-group-text-fb {
         background-color: #e7f3ff !important;
         color: #1877F2 !important;
@@ -56,13 +59,18 @@
         border-color: #dee2e6 !important;
     }
 
-    /* Автоматично разтягане на Django input полетата в input-group */
     .input-group input,
     .input-group select,
     .input-group textarea {
         flex: 1 1 auto !important;
         width: 1% !important;
         min-width: 0 !important;
+    }
+
+    /* Стил за Cropper контейнера в модала */
+    .img-container img {
+        max-width: 100%;
+        display: block;
     }
 </style>
 
@@ -79,21 +87,25 @@
                     </span>
                 </div>
 
-                <form method="POST" enctype="multipart/form-data">
+                <form id="profile-form" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+
+                    <!-- Скрито поле за запазване на изрязаното изображение в Base64 -->
+                    <input type="hidden" name="cropped_avatar" id="cropped-avatar">
 
                     <div class="d-flex align-items-center mb-4">
                         {% if user_obj.profile.avatar %}
-                            <img src="{{ user_obj.profile.avatar.url }}" class="rounded-circle me-3 object-fit-cover shadow-sm" style="width: 80px; height: 80px;" alt="Avatar">
+                            <img id="avatar-preview" src="{{ user_obj.profile.avatar.url }}" class="rounded-circle me-3 object-fit-cover shadow-sm" style="width: 80px; height: 80px;" alt="Avatar">
                         {% else %}
-                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold fs-3 me-3 shadow-sm text-uppercase" style="width: 80px; height: 80px;">
+                            <div id="avatar-placeholder" class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold fs-3 me-3 shadow-sm text-uppercase" style="width: 80px; height: 80px;">
                                 {{ user_obj.username.0 }}
                             </div>
+                            <img id="avatar-preview" src="" class="rounded-circle me-3 object-fit-cover shadow-sm d-none" style="width: 80px; height: 80px;" alt="Avatar">
                         {% endif %}
 
                         <div>
                             <label class="form-label fw-bold mb-1">Промяна на аватар</label>
-                            {{ p_form.avatar }}
+                            <input type="file" id="avatar-input" accept="image/*" class="form-control">
                         </div>
                     </div>
 
@@ -130,7 +142,7 @@
                         </div>
                     </div>
 
-                    <!-- Социални мрежи (Input полета с разширена ширина) -->
+                    <!-- Социални мрежи -->
                     <div class="row g-3 mb-3 pt-2">
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-secondary small text-uppercase">Facebook профил</label>
@@ -154,6 +166,27 @@
 
                     <button type="submit" class="btn btn-gt-primary w-100 py-2 mt-2">Запази промените</button>
                 </form>
+            </div>
+
+            <!-- Модален прозорец за Cropper.js -->
+            <div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content rounded-4 border-0 shadow">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold" id="cropModalLabel">Изряжи профилната снимка</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="img-container">
+                                <img id="image-to-crop" src="" alt="Crop Area">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Отказ</button>
+                            <button type="button" id="crop-button" class="btn btn-primary rounded-pill px-4">Запази изрязването</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         {% else %}
@@ -191,7 +224,6 @@
                     </div>
                 </div>
 
-                <!-- Социални мрежи (Бранд бутони) -->
                 {% if user_obj.profile.facebook_url or user_obj.profile.instagram_url %}
                     <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top">
                         {% if user_obj.profile.facebook_url %}
@@ -265,4 +297,70 @@
 
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let cropper;
+    const avatarInput = document.getElementById("avatar-input");
+    const imageToCrop = document.getElementById("image-to-crop");
+    const cropModalElement = document.getElementById("cropModal");
+    const cropModal = new bootstrap.Modal(cropModalElement);
+    const cropButton = document.getElementById("crop-button");
+    const croppedAvatarInput = document.getElementById("cropped-avatar");
+    const avatarPreview = document.getElementById("avatar-preview");
+    const avatarPlaceholder = document.getElementById("avatar-placeholder");
+
+    avatarInput.addEventListener("change", function (e) {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            const file = files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function (e) {
+                imageToCrop.src = e.target.result;
+                cropModal.show();
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    cropModalElement.addEventListener("shown.bs.modal", function () {
+        cropper = new Cropper(imageToCrop, {
+            aspectRatio: 1, // Квадратно изрязване (1:1)
+            viewMode: 1,
+            autoCropArea: 0.8,
+            responsive: true,
+        });
+    });
+
+    cropModalElement.addEventListener("hidden.bs.modal", function () {
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        avatarInput.value = ""; // Нулиране на входа, за да може да се избира същият файл отново
+    });
+
+    cropButton.addEventListener("click", function () {
+        if (cropper) {
+            const canvas = cropper.getCroppedCanvas({
+                width: 300,
+                height: 300,
+            });
+
+            const base64Image = canvas.toDataURL("image/jpeg");
+            croppedAvatarInput.value = base64Image;
+
+            // Обновяване на прегледа в реално време
+            avatarPreview.src = base64Image;
+            avatarPreview.classList.remove("d-none");
+            if (avatarPlaceholder) {
+                avatarPlaceholder.classList.add("d-none");
+            }
+
+            cropModal.hide();
+        }
+    });
+});
+</script>
 {% endblock %}

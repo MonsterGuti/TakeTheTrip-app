@@ -1,3 +1,4 @@
+import base64
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, get_user_model
@@ -6,6 +7,7 @@ from django.contrib import messages
 from django.db.models import Avg
 from django.conf import settings
 from django.core.mail import send_mail
+from django.core.files.base import ContentFile
 from django.utils.html import strip_tags
 
 from rides.models import Ride
@@ -36,33 +38,6 @@ def register(request):
 
             if user.email:
                 pass
-                # subject = 'Добре дошли в TakeTheTrip!'
-                # html_content = f"""
-                # <html>
-                #     <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-                #         <div style="max-width: 600px; margin: 0 auto; padding: 25px; border: 1px solid #e0e0e0; border-radius: 8px;">
-                #             <h2 style="color: #0d6efd; margin-top: 0;">TakeTheTrip</h2>
-                #             <p>Здравейте, <strong>{user.username}</strong>!</p>
-                #             <p>Благодарим ви, че се регистрирахте в TakeTheTrip. Сега можете да споделяте пътуванията си или да намерите удобен транспорт.</p>
-                #             <p>Желаем ви приятни и безаварийни пътувания!</p>
-                #         </div>
-                #     </body>
-                # </html>
-                # """
-                # plain_message = strip_tags(html_content)
-                #
-                # try:
-                #     send_mail(
-                #         subject=subject,
-                #         message=plain_message,
-                #         from_email=settings.DEFAULT_FROM_EMAIL,
-                #         recipient_list=[user.email],
-                #         html_message=html_content,
-                #         fail_silently=False,
-                #     )
-                #     print(f"--- USERS SMTP SUCCESS ---: {user.email}")
-                # except Exception as e:
-                #     print(f"--- USERS SMTP ERROR ---: {e}")
 
             messages.success(request, f'Успешна регистрация! Добре дошли, {user.username}!')
             return redirect('home')
@@ -70,6 +45,7 @@ def register(request):
         form = UserRegisterForm()
 
     return render(request, 'users/register.html', {'form': form})
+
 
 @login_required
 def profile(request):
@@ -81,22 +57,25 @@ def profile(request):
             request.POST, request.FILES, instance=profile_obj
         )
 
-        # ТУК СЛАГАМЕ ДЕБЪГ ПРИНТОВЕ
-        print("--- DEBUG FILES ---", request.FILES)
-        print("--- DEBUG POST ---", request.POST)
+        cropped_avatar = request.POST.get('cropped_avatar')
 
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
-            p_form.save()
-            print("--- DEBUG SUCCESS: Avatar is now:", profile_obj.avatar)
+            updated_profile = p_form.save(commit=False)
+
+            # Обработка на изрязаното изображение от Cropper.js (Base64)
+            if cropped_avatar:
+                format, imgstr = cropped_avatar.split(';base64,')
+                ext = format.split('/')[-1]
+                data = ContentFile(base64.b64decode(imgstr), name=f'avatar_{request.user.id}.{ext}')
+                updated_profile.avatar = data
+
+            updated_profile.save()
             messages.success(request, 'Профилът ви беше обновен успешно!')
             return redirect('profile')
-        else:
-            print("--- DEBUG FORM ERRORS ---", p_form.errors)
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=profile_obj)
-
 
     driver_rides = Ride.objects.filter(driver=request.user).order_by('-departure_time')
     reviews = Review.objects.filter(driver=request.user).select_related('reviewer', 'reviewer__profile').order_by(
