@@ -317,3 +317,74 @@ html, body {
     border-top-right-radius: 50px !important;
     border-bottom-right-radius: 50px !important;
 }
+
+/* ==========================================
+   ИЗПРАВЯНЕ НА ЧАТА И INPUT ЗА МОБИЛНИ (iOS)
+   ========================================== */
+
+/* 1. Предотвратяване на страничен скрол и хоризонтално счупване */
+#chat-section {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.chat-box {
+    background-color: #f4f6f8 !important;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 2. Подравняване на балончетата */
+.chat-msg-outgoing,
+.chat-msg-incoming {
+    max-width: 82% !important;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+/* 3. Модерен вграден Input (Telegram / Instagram style) */
+.chat-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.chat-input-field {
+    font-size: 16px !important; /* Ключово: спира автоматичния zoom на Safari! */
+    border-radius: 25px !important;
+    padding-right: 48px !important;
+    padding-left: 16px !important;
+    height: 44px;
+    width: 100%;
+    border: 1px solid var(--gt-border-color);
+}
+
+.chat-input-field:focus {
+    box-shadow: none !important;
+    border-color: var(--gt-accent) !important;
+}
+
+/* Бутон, вграден вътре в заобленото текстово поле */
+.chat-send-btn-inner {
+    position: absolute;
+    right: 4px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--gt-accent);
+    color: #ffffff;
+    border: none;
+}
+
+.chat-send-btn-inner:hover {
+    background-color: var(--gt-accent-hover);
+}

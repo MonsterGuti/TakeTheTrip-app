@@ -381,6 +381,7 @@
             {% endif %}
 
             <!-- Чат секция -->
+            <!-- Чат секция -->
             {% if is_participant %}
                 <div id="chat-section" class="card shadow-sm border-0 rounded-4 mb-4 bg-white overflow-hidden">
                     <div class="card-header bg-white border-bottom py-3 px-3 px-sm-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
@@ -388,13 +389,13 @@
                             <i class="fa-solid fa-comments text-primary"></i> Общ чат
                         </h5>
                         <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2.5 py-1 small">
-                            {{ ride.driver.get_full_name|default:ride.driver.username }} (Шофьор)
-                        </span>
+                {{ ride.driver.get_full_name|default:ride.driver.username }} (Шофьор)
+            </span>
                     </div>
 
                     <!-- Контейнер за съобщенията -->
-                    <div id="chat-box" class="chat-box p-2 p-sm-3 bg-light overflow-auto"
-                         style="height: 380px; max-height: 55vh;">
+                    <div id="chat-box" class="chat-box p-3 bg-light overflow-auto"
+                         style="height: 350px; max-height: 50vh;">
                         <!-- Съобщенията се зареждат динамично тук -->
                     </div>
 
@@ -402,13 +403,11 @@
                     <div class="card-footer bg-white border-top p-2 p-sm-3">
                         <form id="chat-form" method="POST" action="{% url 'send_message_ajax' ride.pk %}">
                             {% csrf_token %}
-                            <div class="input-group">
+                            <div class="chat-input-wrapper">
                                 <input type="text" name="content"
-                                       class="form-control chat-input-field border-end-0 shadow-none ps-3"
+                                       class="form-control chat-input-field shadow-none"
                                        placeholder="Напишете съобщение..." autocomplete="off" required>
-                                <button class="btn btn-primary chat-send-btn px-3 px-sm-4 fw-semibold d-inline-flex align-items-center gap-1"
-                                        type="submit">
-                                    <span class="d-none d-sm-inline">Изпрати</span>
+                                <button class="btn btn-primary chat-send-btn-inner" type="submit">
                                     <i class="fa-solid fa-paper-plane fs-6"></i>
                                 </button>
                             </div>
@@ -618,14 +617,14 @@
                                 "X-Requested-With": "XMLHttpRequest"
                             }
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                inputField.value = "";
-                                fetchMessages();
-                            }
-                        })
-                        .catch(error => console.error("Грешка при изпращане:", error));
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    inputField.value = "";
+                                    fetchMessages();
+                                }
+                            })
+                            .catch(error => console.error("Грешка при изпращане:", error));
                     });
                 }
             {% endif %}
