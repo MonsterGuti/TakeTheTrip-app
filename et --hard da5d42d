@@ -1,0 +1,67 @@
+[33m17f7bd4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain-fixed[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fix chat layout, styles, and rendering logic
+[33mde7d945[m final upgrade
+[33mfb3a896[m final upgrade
+[33meca7ba3[m user-friendly chat
+[33mc5ae4cc[m Fix chat message vertical layout and autocomplete JavaScript logic
+[33m8a43373[m Fix chat message vertical spacing and user matching logic
+[33mda5d42d[m user friendy chat
+[33m462eec6[m user friendy chat
+[33mfc61dd7[m final changes
+[33m96df881[m removing help text
+[33m8e19779[m Добавено изрязване на профилни снимки
+[33m394128e[m Fix sitemap.xml view and resolve internal server error
+[33md21a6d6[m Add sitemap.xml for Google Search Console
+[33mb9462cd[m Update base template with dynamic static links and canonical URL
+[33m073856b[m Make share button match price badge height and size
+[33m54bd576[m Optimize share button for mobile users
+[33m4fc4622[m Fix card link in home template to open ride detail directly for guests
+[33m35e9e66[m Allow guest view for ride details and redirect to login on booking
+[33m8167ac0[m[33m ([m[1;31morigin/main-fixed[m[33m)[m Allow public ride viewing, prompt login for booking and add share button
+[33mb65b170[m Fix favicon absolute paths for Google indexer
+[33m1c739ea[m Revert og-image tags to stable hardcoded HTTPS path
+[33ma78fc95[m Force Instagram image cache update
+[33m826bd10[m adding icons
+[33m07bcfb8[m Add full set of favicons and webmanifest
+[33m64526fe[m Add SEO noindex to login and favicon links to base template
+[33ma8f128a[m Remove password reset link and add contact footer
+[33m11dce77[m Fix bio required validation error on profile edit
+[33mf3d2282[m changes
+[33m32edbdb[m Make avatar optional on update and fix profile save flow
+[33m7a2a6df[m Disable email sending in users/views.py with pass to prevent syntax errors
+[33m9ce1824[m Cleaned up merge conflicts and disabled email notifications
+[33m2da9d7f[m Disable email notifications
+[33m719937a[m[33m ([m[1;32mmain[m[33m)[m fix
+[33md1eb7f9[m Restore full working state with onboarding and emails
+[33m85bf741[m Switch all email logic to Gmail SMTP backend
+[33m57dbd5b[m Switch email backend to Gmail SMTP
+[33md9992d6[m Update allowed hosts
+[33m48de1c2[m Update email sender to verified domain
+[33ma189275[m Fix geocode proxy to target cities/villages instead of regions
+[33maeeab0a[m Fix exact coordinates for main cities in geocode proxy
+[33m9b0275b[m Improve geocode proxy accuracy with settlement filter
+[33mb21a4ea[m Use OSM Deutschland tile server to avoid all restrictions
+[33m43fe854[m Switch to free OSM France tiles to remove API key requirement
+[33mab43aea[m Add geocode proxy to bypass CORS restrictions for all settlements
+[33me118a9d[m Use CartoDB light tiles to avoid IP blocking
+[33m828be31[m Use OSM France tiles to avoid API key requirement
+[33me5c0e85[m Fix map tiles 403 error using CartoDB provider
+[33m38dc913[m Use environment variable for Resend API key
+[33m3ea24b7[m Switch to Resend API for email notifications
+[33m2cad749[m changin email port
+[33m4fbb6cc[m changing email port
+[33m70fda2d[m Disable TLS for port 2525 SMTP
+[33mc390d9c[m Switch SMTP port to 2525
+[33mceed1c1[m Fix BASE_DIR placement in settings.py
+[33m8aef5dc[m Remove sensitive key and use env
+[33md4093fb[m Use env variables for email config
+[33m9a03c00[m Use env variables for email
+[33me3ddd07[m Test email with console backend
+[33md8e7303[m Make registration email asynchronous in users/views.py
+[33mf9820dd[m Debug email thread errors
+[33mdf3129f[m creating admin models
+[33me64a5a9[m async sending emails
+[33m18e45d6[m added image preview
+[33m4c7f7ae[m adding image preview
+[33med4d0a6[m updating settings
+[33m67e13cd[m SEO optimization
+[33m01b2a5a[m Initial commit
