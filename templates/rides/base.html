@@ -8,13 +8,16 @@
 
     {% block extra_head %}{% endblock %}
 
-    <!-- Favicon & Mobile Icons (Google Compatible) -->
-    <link rel="shortcut icon" href="https://takethetripapp.com/static/images/favicon.ico">
-    <link rel="icon" type="image/x-icon" href="https://takethetripapp.com/static/images/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://takethetripapp.com/static/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://takethetripapp.com/static/images/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://takethetripapp.com/static/images/apple-touch-icon.png">
-    <link rel="manifest" href="https://takethetripapp.com/static/images/site.webmanifest">
+    <!-- Canonical URL за SEO -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <!-- Favicon & Mobile Icons (Динамично през Django static) -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
 
     <!-- SEO Meta Tags -->
     <title>{% block title %}TakeTheTrip — Споделено пътуване в България{% endblock %}</title>
@@ -26,8 +29,8 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="{% block og_title %}TakeTheTrip — Модерната платформа за споделени пътувания{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Намери или предложи споделено пътуване за броени секунди. Пътувай удобно и спести разходи!{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}https://takethetripapp.com/static/images/og-share.jpg{% endblock %}">
-    <meta property="og:image:secure_url" content="{% block og_image_secure %}https://takethetripapp.com/static/images/og-share.jpg{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.jpg' %}{% endblock %}">
+    <meta property="og:image:secure_url" content="{% block og_image_secure %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.jpg' %}{% endblock %}">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -39,7 +42,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}TakeTheTrip — Споделено пътуване{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Сподели пътуване и пътувай по-изгодно из цяла България.{% endblock %}">
-    <meta name="twitter:image" content="{% block twitter_image %}https://takethetripapp.com/static/images/og-share.jpg{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-share.jpg' %}{% endblock %}">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -147,9 +150,9 @@
                     </a>
 
                     <!-- 5. Изход -->
-                    <form method="POST" action="{% url 'logout' %}" class="m-0">
+                    <form method="POST" action="{% url 'logout' %}" class="m-0 p-0">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-gt-outline btn-sm w-100 text-start text-lg-center d-inline-flex align-items-center gap-2 justify-content-center">
+                        <button type="submit" class="btn btn-gt-outline btn-sm w-100 text-start text-lg-center d-inline-flex align-items-center gap-2 justify-content-start justify-content-lg-center">
                             <i class="fa-solid fa-right-from-bracket"></i>
                             <span>Изход</span>
                         </button>
