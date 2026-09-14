@@ -55,9 +55,11 @@ class RideForm(forms.ModelForm):
                 }
             ),
             'departure_time': forms.DateTimeInput(
+                format='%Y-%m-%dT%H:%M',  # Ключово за Android Chrome
                 attrs={
                     'class': 'form-control form-control-gt',
                     'type': 'datetime-local',
+                    'onclick': 'this.showPicker()',  # Отваря директно системния календар при натискане
                 }
             ),
             'available_seats': forms.NumberInput(
@@ -74,6 +76,10 @@ class RideForm(forms.ModelForm):
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['departure_time'].widget.format = '%Y-%m-%dT%H:%M'
 
 from .models import RideMessage
 

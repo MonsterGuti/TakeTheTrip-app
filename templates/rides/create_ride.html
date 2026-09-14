@@ -39,9 +39,8 @@
                                     {{ field.label }}
                                 </label>
 
-                                <div class="input-group">
-                                    {{ field }}
-                                </div>
+                                <!-- Полето се рендерира директно без input-group, за да работи изрядно календара -->
+                                {{ field }}
 
                                 {% if field.help_text %}
                                     <div class="form-text text-muted extra-small mt-1" style="font-size: 0.775rem;">
@@ -59,7 +58,7 @@
                         {% endfor %}
                     </div>
 
-                    <!-- Блок със съвети (Коригиран текст) -->
+                    <!-- Блок със съвети -->
                     <div class="p-3 bg-light rounded-3 border mt-4 mb-4">
                         <div class="d-flex align-items-center gap-2 text-dark fw-semibold small mb-1">
                             <i class="fa-solid fa-lightbulb text-warning"></i>
