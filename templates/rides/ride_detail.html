@@ -35,22 +35,26 @@
         <div class="col-12 col-md-10 col-lg-8">
             <div class="card shadow-sm border-0 p-3 p-sm-4 mb-4 rounded-4 bg-white">
 
-                <!-- Хедър: Маршрут, Цена и Бутон за Споделяне -->
+                <!-- Хедър: Маршрут, Бутон за Споделяне и Цена -->
                 <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
                     <h3 class="fw-bold m-0 text-dark fs-4 fs-sm-3 d-flex align-items-center gap-2">
                         <span>{{ ride.origin }}</span>
                         <i class="fa-solid fa-arrow-right-long text-muted fs-5"></i>
                         <span>{{ ride.destination }}</span>
                     </h3>
-                    <div class="d-flex align-items-center justify-content-between justify-content-sm-end gap-2 w-100 w-sm-auto mt-2 mt-sm-0">
+
+                    <!-- Група с еднакви по размер елементи -->
+                    <div class="d-flex align-items-center gap-2">
                         <button type="button" id="share-btn"
-                                class="btn btn-outline-primary rounded-pill px-3 py-2 fs-6 fw-semibold shadow-sm d-inline-flex align-items-center justify-content-center gap-2 flex-grow-1 flex-sm-grow-0">
+                                class="btn btn-outline-primary rounded-pill px-3 py-2 fs-6 fw-semibold shadow-sm d-inline-flex align-items-center justify-content-center gap-2 border-1"
+                                style="line-height: 1.25; height: 38px;">
                             <i class="fa-solid fa-share-nodes"></i>
                             <span>Сподели</span>
                         </button>
-                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fs-6 fw-bold rounded-pill shadow-sm">
-        {{ ride.price_per_seat }} €
-    </span>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fs-6 fw-bold rounded-pill shadow-sm d-inline-flex align-items-center justify-content-center"
+                              style="line-height: 1.25; height: 38px;">
+            {{ ride.price_per_seat }} €
+        </span>
                     </div>
                 </div>
 
