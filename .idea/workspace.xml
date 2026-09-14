@@ -35,12 +35,12 @@
     &quot;assignee&quot;: &quot;MonsterGuti&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/MonsterGuti/TakeTheTrip-app.git",
-    "accountId": "6e138230-9dc6-4d3d-8857-1fe72ce1b784"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MonsterGuti/TakeTheTrip-app.git&quot;,
+    &quot;accountId&quot;: &quot;6e138230-9dc6-4d3d-8857-1fe72ce1b784&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -131,6 +131,7 @@
       <workItem from="1788190563343" duration="49584000" />
       <workItem from="1789053121342" duration="16447000" />
       <workItem from="1789234468185" duration="6614000" />
+      <workItem from="1789386328741" duration="345000" />
     </task>
     <task id="LOCAL-00001" summary="SEO optimization">
       <option name="closed" value="true" />

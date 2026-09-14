@@ -526,32 +526,33 @@
                 }
 
                 function renderMessage(msg) {
-                    if (msg.content.startsWith("🤖 [Система]:")) {
-                        const systemText = msg.content.replace("🤖 [Система]:", "").trim();
+                    const content = msg.content || msg.text || '';
+
+                    if (content.startsWith("🤖 [Система]:")) {
+                        const systemText = content.replace("🤖 [Система]:", "").trim();
                         return `
                             <div class="text-center my-2 w-100">
                                 <span class="badge bg-white text-muted border fw-normal px-2 py-1 rounded-pill shadow-sm small system-msg-badge">
-                                    🤖 ${systemText} <span class="text-black-50 ms-1">(${msg.created_at})</span>
+                                    🤖 ${systemText} <span class="text-black-50 ms-1">(${msg.created_at || ''})</span>
                                 </span>
                             </div>
                         `;
                     }
 
                     const isMe = msg.sender_username === currentUsername;
-                    /* Фикснат URL път към потребителския профил */
-                    const profileUrl = `/users/profile/${msg.sender_username}/`;
+                    const profileUrl = `/users/profile/${encodeURIComponent(msg.sender_username)}/`;
 
                     const avatarHtml = msg.avatar_url
                         ? `<a href="${profileUrl}"><img src="${msg.avatar_url}" class="rounded-circle shadow-sm flex-shrink-0 border" style="width: 32px; height: 32px; object-fit: cover;" alt="Avatar"></a>`
-                        : `<a href="${profileUrl}" class="text-decoration-none"><div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center shadow-sm flex-shrink-0 text-uppercase fw-bold" style="width: 32px; height: 32px; font-size: 12px;">${msg.sender_initial}</div></a>`;
+                        : `<a href="${profileUrl}" class="text-decoration-none"><div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center shadow-sm flex-shrink-0 text-uppercase fw-bold" style="width: 32px; height: 32px; font-size: 12px;">${msg.sender_initial || msg.sender_username.charAt(0)}</div></a>`;
 
                     if (isMe) {
                         return `
                             <div class="chat-msg-outgoing mb-2.5">
                                 <div class="bubble p-2 px-3">
-                                    <div class="fs-6 lh-sm">${msg.content}</div>
+                                    <div class="fs-6 lh-sm">${content}</div>
                                     <div class="text-end mt-1" style="font-size: 0.68rem;">
-                                        <span class="time-stamp">${msg.created_at}</span>
+                                        <span class="time-stamp">${msg.created_at || ''}</span>
                                     </div>
                                 </div>
                             </div>
@@ -563,11 +564,11 @@
                                 <div class="bubble p-2 px-3">
                                     <div class="d-flex align-items-center justify-content-between gap-2 mb-1">
                                         <a href="${profileUrl}" class="text-decoration-none fw-bold text-primary small text-truncate">
-                                            ${msg.sender_name}
+                                            ${msg.sender_name || msg.sender_username}
                                         </a>
-                                        <span class="text-muted extra-small" style="font-size: 0.68rem;">${msg.created_at}</span>
+                                        <span class="text-muted extra-small" style="font-size: 0.68rem;">${msg.created_at || ''}</span>
                                     </div>
-                                    <div class="text-dark fs-6 lh-sm">${msg.content}</div>
+                                    <div class="text-dark fs-6 lh-sm">${content}</div>
                                 </div>
                             </div>
                         `;
@@ -576,18 +577,20 @@
 
                 function fetchMessages() {
                     fetch(`/ride/${rideId}/messages/fetch/`)
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) throw new Error("HTTP error " + response.status);
+                            return response.json();
+                        })
                         .then(data => {
-                            if (data.success) {
-                                if (data.messages.length !== lastMessageCount) {
-                                    if (data.messages.length === 0) {
-                                        chatBox.innerHTML = '<p class="text-muted text-center my-auto small">Няма съобщения. Започнете разговора!</p>';
-                                    } else {
-                                        chatBox.innerHTML = data.messages.map(renderMessage).join('');
-                                    }
-                                    chatBox.scrollTop = chatBox.scrollHeight;
-                                    lastMessageCount = data.messages.length;
+                            const messages = data.messages || [];
+                            if (messages.length !== lastMessageCount) {
+                                if (messages.length === 0) {
+                                    chatBox.innerHTML = '<p class="text-muted text-center my-auto small">Няма съобщения. Започнете разговора!</p>';
+                                } else {
+                                    chatBox.innerHTML = messages.map(renderMessage).join('');
                                 }
+                                chatBox.scrollTop = chatBox.scrollHeight;
+                                lastMessageCount = messages.length;
                             }
                         })
                         .catch(error => console.error("Грешка при извличане на съобщенията:", error));
@@ -614,7 +617,7 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            if (data.success) {
+                            if (data.success || data.status === 'ok') {
                                 inputField.value = "";
                                 fetchMessages();
                             }
