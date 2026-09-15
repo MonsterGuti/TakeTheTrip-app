@@ -22,8 +22,8 @@ class Profile(models.Model):
     )
     car_model = models.CharField(
         max_length=100,
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         verbose_name='Автомобил (Марка и модел)',
         help_text='напр. Mercedes-Benz S 63',
     )

@@ -37,7 +37,7 @@ class UserRegisterForm(UserCreationForm):
     )
     car_model = forms.CharField(
         max_length=100,
-        required=True,
+        required=False,
         label="Автомобил (Марка/Модел)",
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'напр. Mercedes S 63'})
     )
@@ -103,7 +103,7 @@ class ProfileUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['avatar'].required = False
         self.fields['phone_number'].required = True
-        self.fields['car_model'].required = True
+        self.fields['car_model'].required = False
         self.fields['bio'].required = False
 
         self.fields['facebook_url'].required = False
