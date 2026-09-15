@@ -62,7 +62,7 @@ A modern web application designed to connect drivers and passengers traveling al
 
 ## Production Deployment Workflow
 
-Commands for updating the live environment on the server:
+Commands for updating the virtual environment on the server:
 
 ```bash
 cd /var/www/TakeTheTrip-app
