@@ -1,41 +1,41 @@
-#TakeTheTrip — Платформа за Споделено Пътуване
+# TakeTheTrip — Ride-Sharing Platform
 
-Уеб приложение за организиране на споделени пътувания между шофьори и пътници. Проектът е създаден с цел лесно откриване на маршрути, намаляване на транспортните разходи и директна комуникация между потребителите.
-
----
-
-## Основни функционалности
-
-* **Профили и регистрация:**
-  * Полето за автомобил е незадължително — подходящо както за шофьори, така и за пътници.
-  * Персонални профили с опция за снимка, телефон и връзки към социални мрежи.
-* **Управление на обяви:**
-  * Публикуване на пътуване (маршрут, дата, час, цена и свободни места).
-  * Интуитивен селектор за дата и час, съобразен с мобилни устройства.
-  * Търсене и филтриране на налични обяви.
-* **Система за отзиви:**
-  * Оценяване и коментари между пътуващите след приключване на курс.
+A modern web application designed to connect drivers and passengers traveling along similar routes. The platform simplifies trip discovery, reduces travel costs, and facilitates direct communication between users.
 
 ---
 
-## Технологичен стек
+## Key Features
 
-* **Backend:** Python / Django
+* **User Accounts & Profiles:**
+  * Optional vehicle registration — tailored for both drivers and passengers.
+  * Personalized profiles with profile picture upload, contact details, and social media links (Facebook / Instagram).
+* **Trip Management:**
+  * Publish new rides with detailed route information, departure dates, seat capacity, and pricing.
+  * Mobile-optimized date and time selectors for seamless trip creation.
+  * Search and filter options for available trips.
+* **Review & Rating System:**
+  * Ratings and comments between drivers and passengers following completed trips.
+
+---
+
+## Tech Stack
+
+* **Backend:** Python / Django Framework
 * **Frontend:** HTML5, CSS3, JavaScript, Bootstrap 5
-* **База данни:** SQLite (Development) / PostgreSQL (Production)
-* **Production Environment:** Ubuntu Server, Nginx, Gunicorn, systemd
+* **Database:** SQLite (Development) / PostgreSQL (Production)
+* **Production Deployment:** Ubuntu Server, Nginx, Gunicorn, systemd
 
 ---
 
-## Локално стартиране
+## Local Development Setup
 
-1. **Клониране на репозиторито:**
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/MonsterGuti/TakeTheTrip-app.git
    cd TakeTheTrip-app
    ```
 
-2. **Създаване и активиране на виртуална среда:**
+2. **Create and activate virtual environment:**
    ```bash
    python -m venv venv
    
@@ -46,23 +46,23 @@
    source venv/bin/activate
    ```
 
-3. **Инсталиране на библиотеки:**
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Миграции и стартиране:**
+4. **Run migrations and start server:**
    ```bash
    python manage.py migrate
    python manage.py runserver
    ```
-   Приложението ще бъде достъпно на `http://127.0.0.1:8000/`.
+   Access the application at `http://127.0.0.1:8000/`.
 
 ---
 
-## Деплой на production сървър
+## Production Deployment Workflow
 
-Команди за обновяване на живата среда:
+Commands for updating the live environment on the server:
 
 ```bash
 cd /var/www/TakeTheTrip-app
@@ -75,8 +75,8 @@ sudo systemctl restart takethetrip
 
 ---
 
-## Автор
+## Author
 
-**Мартин Гогуланов**
+**Martin Gogulanov**
 * GitHub: [@MonsterGuti](https://github.com/MonsterGuti)
 * Live App: [takethetripapp.com](https://takethetripapp.com)
